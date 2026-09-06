@@ -482,31 +482,31 @@ function scheduleSave(){
   saveTimer = setTimeout(persistState, 600);
 }
 
-async function persistState(){
+function persistState(){
   if(!storageAvailable) return;
+
   try{
     const payload = JSON.stringify(appState);
-    const res = await window.storage.set(STORAGE_KEY, payload, false);
-    if(!res){
-      console.warn("保存に失敗しました(結果なし)");
-    }
+    localStorage.setItem(STORAGE_KEY, payload);
   }catch(e){
     console.error("保存エラー:", e);
   }
 }
 
-async function loadState(){
+function loadState(){
   try{
-    const res = await window.storage.get(STORAGE_KEY, false);
-    if(res && res.value){
-      const parsed = JSON.parse(res.value);
+    const value = localStorage.getItem(STORAGE_KEY);
+
+    if(value){
+      const parsed = JSON.parse(value);
+
       appState = Object.assign(defaultState(), parsed);
+
       if(!appState.words) appState.words = {};
       if(!appState.sessions) appState.sessions = [];
       if(!appState.studyDates) appState.studyDates = [];
     }
   }catch(e){
-    // キーが無い場合など。新規ユーザーとして初期状態を使う。
     console.log("初期状態で開始します", e && e.message);
   }
 }
@@ -1609,14 +1609,16 @@ document.addEventListener("click", (e) => {
 });
 
 /* ================= 初期化 ================= */
-async function init(){
+function init(){
   const loadingEl = document.getElementById("loading");
+
   try{
-    if(typeof window.storage === "undefined") storageAvailable = false;
-    await loadState();
+    storageAvailable = typeof localStorage !== "undefined";
+    loadState();
   }catch(e){
     storageAvailable = false;
   }
+
   if(loadingEl) loadingEl.style.display = "none";
   document.getElementById("app").style.display = "block";
   goto("home");
