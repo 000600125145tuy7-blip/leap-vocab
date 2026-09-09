@@ -1473,6 +1473,37 @@ function bindEvents(){
   document.querySelectorAll('input[data-field]').forEach(inp => {
     inp.addEventListener("change", onRangeInputChange);
   });
+   const countInput = document.getElementById("count-input");
+
+   if(countInput){
+     const updateCount = () => {
+       const mode = nav.screen === "quiz-setup" ? "quiz" : "spell";
+       const settings = mode === "quiz" ? quizSetup : spellSetup;
+   
+       const pool = currentPool(settings);
+       const max = Math.max(1, pool.length);
+   
+       let v = parseInt(countInput.value, 10);
+   
+       if(isNaN(v)){
+         v = settings.count;
+       }
+   
+       v = Math.max(1, Math.min(max, v));
+   
+       settings.count = v;
+       render();
+     };
+   
+     countInput.addEventListener("change", updateCount);
+   
+     countInput.addEventListener("keydown", (e) => {
+       if(e.key === "Enter"){
+         e.preventDefault();
+         updateCount();
+       }
+     });
+   }
   const spellForm = document.getElementById("spell-form");
   if(spellForm){
     spellForm.addEventListener("submit", (e) => {
