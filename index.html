@@ -1479,7 +1479,6 @@ function bindEvents(){
      const updateCount = () => {
        const mode = nav.screen === "quiz-setup" ? "quiz" : "spell";
        const settings = mode === "quiz" ? quizSetup : spellSetup;
-   
        const pool = currentPool(settings);
        const max = Math.max(1, pool.length);
    
@@ -1504,6 +1503,7 @@ function bindEvents(){
        }
      });
    }
+   
   const spellForm = document.getElementById("spell-form");
   if(spellForm){
     spellForm.addEventListener("submit", (e) => {
