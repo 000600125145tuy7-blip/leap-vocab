@@ -1117,9 +1117,19 @@ function renderSetup(mode){
   <div class="field-group">
     <div class="field-label">問題数</div>
     <div class="stepper">
-      <button data-action="count-step" data-delta="-1">−</button>
-      <div class="val">${settings.count}</div>
-      <button data-action="count-step" data-delta="1">+</button>
+        <button data-action="count-step" data-delta="-1">−</button>
+      
+        <input
+          id="count-input"
+          type="number"
+          min="1"
+          max="${maxCount}"
+          value="${settings.count}"
+          inputmode="numeric"
+          aria-label="問題数"
+        >
+      
+        <button data-action="count-step" data-delta="1">+</button>
     </div>
     <div class="hint-text" style="text-align:center;">1問刻みで指定できます(最大 ${maxCount}問)</div>
   </div>
